@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:grainplate/views/home/home.dart';
+import 'package:grainplate/views/login/login.dart';
 import 'package:lottie/lottie.dart';
-
-import 'main.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
 _navigatetohome()async{
   await Future.delayed(const Duration(milliseconds: 3000),(){});
   //Navihate to HomePage
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const MyHomePage(title: 'GrainPlate',)));
+  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginView()));
   
 }
   @override
