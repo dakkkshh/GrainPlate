@@ -1,11 +1,12 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:grainplate/components/rounded_button.dart';
+import 'package:grainplate/views/login/login.dart';
+import 'package:grainplate/views/signup/signup.dart';
 import 'package:grainplate/views/welcome/components/background.dart';
 
 class Body extends StatelessWidget {
-  // const Body({Key? key}) : super(key: key);
+  const Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +15,29 @@ class Body extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            "Welcome to GrainPlate",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          // Text(
+          //   "Welcome to GrainPlate",
+          //   style: TextStyle(fontWeight: FontWeight.bold),
+          // ),
           SvgPicture.asset(
             "asset/icons/chat.svg",
             height: size.height * 0.45,
-          )
+          ),
+          SizedBox(height: size.height * 0.05),
+          RoundedButton(
+              key: key,
+              text: "LOGIN",
+              press: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginView()));
+              }),
+          RoundedButton(
+              key: key,
+              text: "SIGNUP",
+              press: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignupView()));
+              })
         ],
       ),
     );

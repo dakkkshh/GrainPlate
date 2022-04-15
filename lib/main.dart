@@ -1,10 +1,31 @@
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grainplate/constants.dart';
 import 'package:grainplate/views/welcome/welcome_screen.dart';
 
 import 'views/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
+  //Disabling Screen Rotation
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  //Caching svg
+  Future.wait([
+    precachePicture(
+      ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, 'asset/icons/chat.svg'),
+      null,
+    ),
+    precachePicture(
+      ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, 'asset/icons/login.svg'),
+      null,
+    ),
+    precachePicture(
+      ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, 'asset/icons/signup.svg'),
+      null,
+    ),
+  ]);
   runApp(const MyApp());
 }
 

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grainplate/components/already_have_an_account_acheck.dart';
+import 'package:grainplate/components/otp_input.dart';
 import 'package:grainplate/components/rounded_button.dart';
 import 'package:grainplate/components/rounded_input_field.dart';
-import 'package:grainplate/components/rounded_password_field.dart';
-import 'package:grainplate/views/generate_otp/generate_otp.dart';
-import 'package:grainplate/views/login/components/background.dart';
-import 'package:grainplate/views/signup/components/or_divider.dart';
-import 'package:grainplate/views/signup/signup.dart';
+import 'package:grainplate/views/login/login.dart';
+import 'package:grainplate/views/signup/components/background.dart';
 
-class Body extends StatelessWidget {
-  const Body({
-    Key? key,
-  }) : super(key: key);
+class Body extends StatefulWidget {
+  @override
+  State<Body> createState() => _BodyState();
+}
 
+class _BodyState extends State<Body> {
+  bool OTP_generated = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -23,48 +23,52 @@ class Body extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             // Text(
-            //   "LOGIN",
+            //   "SIGNUP",
             //   style: TextStyle(fontWeight: FontWeight.bold),
             // ),
             SizedBox(height: size.height * 0.03),
             SvgPicture.asset(
-              "asset/icons/login.svg",
+              "asset/icons/signup.svg",
               height: size.height * 0.35,
             ),
-            SizedBox(height: size.height * 0.03),
             RoundedInputField(
               hintText: "Your Phone Number",
               onChanged: (value) {},
             ),
-            RoundedPasswordField(
+            RoundedOTPField(
+              hintText: "OTP",
               onChanged: (value) {},
             ),
+            // RoundedPasswordField(
+            //   onChanged: (value) {},
+            // ),
+            // OrDivider(),
             RoundedButton(
-              text: "LOGIN",
-              press: () {},
-            ),
-            OrDivider(),
-            RoundedButton(
-              text: "GENERATE OTP",
+              text: OTP_generated ? "SUBMIT" : "GENERATE OTP",
               press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return GenerateOTP();
-                    },
-                  ),
-                );
+                if (OTP_generated) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("OTP Submitted"),
+                  ));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text("OTP Generated"),
+                  ));
+                  setState(() {
+                    OTP_generated = true;
+                  });
+                }
               },
             ),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
+              login: false,
               press: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return SignupView();
+                      return LoginView();
                     },
                   ),
                 );

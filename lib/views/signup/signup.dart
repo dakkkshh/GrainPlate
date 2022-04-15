@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:grainplate/views/login/components/body.dart';
+import 'package:grainplate/views/signup/components/body.dart';
 
-class LoginView extends StatelessWidget {
-
+class SignupView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

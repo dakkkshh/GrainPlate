@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
 _navigatetohome()async{
   await Future.delayed(const Duration(milliseconds: 3000),(){});
   //Navihate to HomePage
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const LoginView()));
+  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginView()));
   
 }
   @override

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "405472558751",
+    "project_id": "grainplate",
+    "storage_bucket": "grainplate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405472558751:android:29923948b13d505bebacaa",
+        "android_client_info": {
+          "package_name": "com.example.grainplate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "405472558751-sk92cp86ltsn96bthdg3gtbheueph78u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe2VpG5VhJiNbC-j-S6LavPcwaZOemV2s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405472558751-sk92cp86ltsn96bthdg3gtbheueph78u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
