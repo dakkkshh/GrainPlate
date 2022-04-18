@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grainplate/components/otp_input.dart';
 import 'package:grainplate/components/rounded_button.dart';
 import 'package:grainplate/components/rounded_input_field.dart';
 import 'package:grainplate/views/generate_otp/components/background.dart';
+import 'package:grainplate/views/home/home.dart';
 
 class Body extends StatefulWidget {
   Body({Key? key}) : super(key: key);
@@ -16,10 +18,33 @@ class _BodyState extends State<Body> {
   final phoneController = TextEditingController();
   final OTPController = TextEditingController();
 
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  late String verificationID;
+  void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCred) async {
+    try {
+      final authCredential = await _auth.signInWithCredential(phoneAuthCred);
+
+      if (authCredential.user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return HomeView();
+            },
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      // TODO
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error: ${e.code}"),
+      ));
+    }
+  }
+
   bool OTP_generated = false;
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
     return background(
       child: Column(
@@ -35,31 +60,60 @@ class _BodyState extends State<Body> {
           ),
           SizedBox(height: size.height * 0.05),
           RoundedInputField(
-              hintText: "Your Phone Number",
-              onChanged: (value) {
-                phoneController.text = value;
-              },
+            hintText: "Your Phone Number",
+            onChanged: (value) {
+              phoneController.text = value;
+            },
           ),
           RoundedOTPField(
-              hintText: "OTP",
-              onChanged: (value) {
-                OTPController.text = value;
-              },
+            hintText: "OTP",
+            onChanged: (value) {
+              OTPController.text = value;
+            },
           ),
           RoundedButton(
               text: OTP_generated ? "SUBMIT" : "GENERATE OTP",
-              press: () {
+              press: () async {
                 if (OTP_generated) {
+                  PhoneAuthCredential phoneAuthCred =
+                      PhoneAuthProvider.credential(
+                          verificationId: verificationID,
+                          smsCode: OTPController.text);
+                  signInWithPhoneAuthCredential(phoneAuthCred);
+
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("OTP Submitted"),
                   ));
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text("OTP Generated"),
-                  ));
-                  setState(() {
-                    OTP_generated = true;
-                  });
+                  await _auth.verifyPhoneNumber(
+                    phoneNumber: "+91"+phoneController.text,
+                    verificationCompleted: (phoneAuthCredential) async {
+                      // signInWithPhoneAuthCredential(phoneAuthCredential);
+                      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      //   content: Text("OTP Generated"),
+                      // ));
+                      print("In verificationCompleted");
+                    },
+                    verificationFailed: (verificationFailed) async {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(verificationFailed.message.toString()),
+                      ));
+                    },
+                    codeSent: (verificationID, resendingToken) async {
+                      //Toast
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("OTP Generated"),
+                      ));
+                      //Updating the UI
+                      setState(() {
+                        OTP_generated = true;
+                        this.verificationID = verificationID;
+                      });
+                    },
+                    codeAutoRetrievalTimeout: (verificationID) async {
+                      print("In codeAutoRetrievalTimeout");
+                    },
+                  );
                 }
               }),
         ],
